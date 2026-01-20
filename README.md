@@ -1,16 +1,77 @@
-# Online-Retail-data-and-Customer-data-Analysis
+Project Overview
 
-In this project, we ingest and clean a large online retail transaction dataset and perform sales, product, customer, and geographical analysis using SQL. By transforming raw transactional data into analytics-ready tables, we uncover revenue trends, customer behavior patterns, and product performance insights that can support business decision-making such as inventory planning, customer segmentation, and regional strategy.
+This project focuses on building an analytics-ready data foundation from raw online retail transaction data using SQL. The objective is to ingest, profile, and clean transactional data to ensure high data quality and prepare it for downstream business analysis such as sales performance, customer behavior, product analysis, and geographical insights.
 
-Data profiling:
+The cleaned dataset supports reliable decision-making related to inventory planning, customer segmentation, and regional business strategy.
 
-1.first calculating total no .of rows to  understand the data.(541909)
-2.then calculated distinct invoice to understand the total no.of orders.(25900)
-3.then used describe function to check the data types of the data in the table.
-4.with the help of case function checked for the null numbers in each column.(no null values in all column checked)
-5.again with case function looked for order return by fixing quantity≤0 because quantity>0 means the item is sold if otherwise then it is returned or cancelled.(10624)
-6.again with case function looked for unit price value by fixing unitprice ≤ 0 because unitprice>0 means the product have some value if otherwise the product doesnt have value or we are  paying customers to take the product which is not possible in real life scenario. (2521) that means data error.
-7.checked for unique customer id to find howmany customers do  we have.(4373)
-8checked for unique stock id to find howmany products are we selling.(3958)
-9.checked for unique country to  understand the business.
-10.With help of cte function checked for duplicate rows by grouping invoiceno,invoicedate and stockcode .(10679)
+Data pipeline Architecture
+
+Raw Retail Dataset → online_retail_raw → online_retail_clean_new
+
+1. Data Ingestion
+
+-Imported the raw online retail transaction dataset into a SQL database
+
+-Created a staging table to store raw transactional records
+
+-Ensured all columns were loaded with appropriate initial data types
+
+2. Data Profiling
+
+Data profiling was performed to understand the structure, quality, and issues in the dataset before cleaning.
+
+Profiling Checks Performed
+
+-Calculated total number of rows to understand dataset size.
+
+ Total records: 541,909
+
+-Calculated distinct invoice numbers to identify total orders.
+
+ Total invoices: 25,900
+
+-Inspected column data types using schema/describe queries.
+
+-Checked for NULL values in each column using conditional logic.
+
+ Result: No NULL values in the checked columns
+
+-Identified returned or cancelled orders by checking quantity ≤ 0.
+
+ Returned/cancelled records: 10,624
+
+-Identified invalid pricing records by checking unit_price ≤ 0.
+
+ Invalid price records: 2,521 (data errors)
+
+-Calculated distinct customer IDs to understand customer base.
+
+ Total customers: 4,373
+
+-Calculated distinct stock codes to understand product variety.
+
+ Total products: 3,958
+
+-Identified unique countries to understand geographical presence.
+
+-Detected duplicate records using CTEs by grouping on
+ invoice_no, invoice_date, and stock_code.
+
+ Duplicate rows identified: 10,679
+
+ 3. Data Cleaning & Transformation
+
+ Based on profiling insights, the following cleaning steps were applied:
+
+ -Created a new column with the correct datetime data type for invoice timestamps.
+
+ -Removed returned and cancelled transactions where quantity ≤ 0.
+
+ -Removed records with invalid pricing where unit_price ≤ 0.
+
+ -Removed duplicate rows to avoid double-counting transactions.
+
+ -Validated that each invoice is uniquely associated with a single customer to ensure transactional integrity.
+
+ -Stored the cleaned and validated data in a new table:
+  online_retail_clean_new
